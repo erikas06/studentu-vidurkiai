@@ -1,6 +1,7 @@
 #include <iostream>
 #include <string>
 #include <vector>
+#include <iomanip>
 using namespace std;
 struct Studentas {
     string vardas;
@@ -32,5 +33,33 @@ int main () {
         }
 
     }
+    cout << "Iveskite studento egzamino pazymi: ";
+
+    while (true) {
+        cin  >> studentas.egzaminas;
+
+        if (studentas.egzaminas >=1 && studentas.egzaminas <= 10) {
+            break;
+
+        }
+        cout << "Pazymys turi buti nuo 1 iki 10." << endl;
+
+
+    }
+    double ndVidurkis = 0;
+
+    for (int pazymys : studentas.nd) {
+        ndVidurkis = ndVidurkis + pazymys;
+    }
+    ndVidurkis = ndVidurkis / studentas.nd.size();
+
+    double galutinis = 0.4 * ndVidurkis + 0.6 * studentas.egzaminas;
+
+    cout << fixed << setprecision(2);
+    cout << "Galutinis pazymys : " << galutinis << endl;
+    
+
 }
+
+    
 
