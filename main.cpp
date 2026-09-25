@@ -38,12 +38,11 @@ void skaitytiIsFailo(vector<Studentas>& studentai, string failoPavadinimas) {
 
     string eilute;
 
+    // Praleidziame pirma failo eilute, kurioje yra stulpeliu pavadinimai
     getline(failas, eilute);
 
     while (getline(failas, eilute)) {
-
         stringstream ss(eilute);
-
         Studentas studentas;
 
         ss >> studentas.vardas >> studentas.pavarde;
@@ -57,9 +56,7 @@ void skaitytiIsFailo(vector<Studentas>& studentai, string failoPavadinimas) {
 
         if (!pazymiai.empty()) {
             studentas.egzaminas = pazymiai.back();
-
             pazymiai.pop_back();
-
             studentas.nd = pazymiai;
 
             studentai.push_back(studentas);
@@ -131,7 +128,8 @@ int main() {
 
                         if (pazymys >= 1 && pazymys <= 10) {
                             studentas.nd.push_back(pazymys);
-                        } else {
+                        }
+                        else {
                             cout << "Pazymys turi buti nuo 1 iki 10." << endl;
                         }
                     }
@@ -149,7 +147,8 @@ int main() {
                         cout << "Pazymys turi buti nuo 1 iki 10." << endl;
                     }
 
-                } else {
+                }
+                else {
 
                     int kiekis;
 
@@ -190,8 +189,8 @@ int main() {
                     testiIvedima = false;
                 }
             }
-        }
 
+        }
         else if (veiksmas == 2) {
 
             Studentas studentas;
@@ -231,7 +230,6 @@ int main() {
 
             studentai.push_back(studentas);
         }
-
         else if (veiksmas == 3) {
 
             string failoPavadinimas;
@@ -241,25 +239,19 @@ int main() {
 
             skaitytiIsFailo(studentai, failoPavadinimas);
         }
-
         else {
+
             cout << "Neteisingas pasirinkimas." << endl;
         }
 
-        if (veiksmas != 0) {
-            cout << endl;
-            cout << "Pasirinkite veiksma:" << endl;
-            cout << "1 - Ivesti studentus" << endl;
-            cout << "2 - Generuoti studentus" << endl;
-            cout << "3 - Nuskaityti studentus is failo" << endl;
-            cout << "0 - Baigti programa" << endl;
+        cout << endl;
+        cout << "Pasirinkite veiksma:" << endl;
+        cout << "1 - Ivesti studentus" << endl;
+        cout << "2 - Generuoti studentus" << endl;
+        cout << "3 - Nuskaityti studentus is failo" << endl;
+        cout << "0 - Baigti programa" << endl;
 
-            cin >> veiksmas;
-        }
-    }
-
-    if (veiksmas == 0 && studentai.empty()) {
-        return 0;
+        cin >> veiksmas;
     }
 
     if (studentai.empty()) {
@@ -282,7 +274,28 @@ int main() {
         cout << "Neteisingas pasirinkimas. Iveskite 1 arba 2: ";
     }
 
-    for (Studentas studentas : studentai) {
+    // Rikiuojame studentus pagal pavarde, o jei pavardes vienodos - pagal varda
+    sort(studentai.begin(), studentai.end(),
+        [](const Studentas& a, const Studentas& b) {
+
+            if (a.pavarde != b.pavarde) {
+                return a.pavarde < b.pavarde;
+            }
+
+            return a.vardas < b.vardas;
+        });
+
+    cout << endl;
+
+    cout << left
+         << setw(20) << "Vardas"
+         << setw(20) << "Pavarde"
+         << setw(15) << "Galutinis"
+         << endl;
+
+    cout << string(55, '-') << endl;
+
+    for (const Studentas& studentas : studentai) {
 
         double ndVidurkis = 0;
 
@@ -299,9 +312,13 @@ int main() {
         double ndMediana;
 
         if (surikiuotiPazymiai.size() % 2 == 1) {
+
             ndMediana =
                 surikiuotiPazymiai[surikiuotiPazymiai.size() / 2];
-        } else {
+
+        }
+        else {
+
             ndMediana =
                 (surikiuotiPazymiai[surikiuotiPazymiai.size() / 2 - 1]
                 + surikiuotiPazymiai[surikiuotiPazymiai.size() / 2])
@@ -311,19 +328,26 @@ int main() {
         double galutinis;
 
         if (pasirinkimas == 1) {
+
             galutinis =
-                0.4 * ndVidurkis + 0.6 * studentas.egzaminas;
-        } else {
+                0.4 * ndVidurkis +
+                0.6 * studentas.egzaminas;
+
+        }
+        else {
+
             galutinis =
-                0.4 * ndMediana + 0.6 * studentas.egzaminas;
+                0.4 * ndMediana +
+                0.6 * studentas.egzaminas;
         }
 
         cout << fixed << setprecision(2);
 
-        cout << studentas.vardas << " "
-             << studentas.pavarde
-             << " Galutinis pazymys: "
-             << galutinis << endl;
+        cout << left
+             << setw(20) << studentas.vardas
+             << setw(20) << studentas.pavarde
+             << setw(15) << galutinis
+             << endl;
     }
 
     return 0;
