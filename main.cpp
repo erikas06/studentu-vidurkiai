@@ -38,7 +38,6 @@ void skaitytiIsFailo(vector<Studentas>& studentai, string failoPavadinimas) {
 
     string eilute;
 
-    // Praleidziame pirma failo eilute, kurioje yra stulpeliu pavadinimai
     getline(failas, eilute);
 
     while (getline(failas, eilute)) {
@@ -73,8 +72,7 @@ int main() {
 
     cout << "Pasirinkite veiksma:" << endl;
     cout << "1 - Ivesti studentus" << endl;
-    cout << "2 - Generuoti studentus" << endl;
-    cout << "3 - Nuskaityti studentus is failo" << endl;
+    cout << "2 - Nuskaityti studentus is failo" << endl;
     cout << "0 - Baigti programa" << endl;
 
     int veiksmas;
@@ -189,48 +187,9 @@ int main() {
                     testiIvedima = false;
                 }
             }
-
         }
+
         else if (veiksmas == 2) {
-
-            Studentas studentas;
-
-            cout << "Iveskite studento varda: ";
-            cin >> studentas.vardas;
-
-            cout << "Iveskite studento pavarde: ";
-            cin >> studentas.pavarde;
-
-            int kiekis;
-
-            while (true) {
-                cout << "Kiek namu darbu pazymiu sugeneruoti? ";
-                cin >> kiekis;
-
-                if (kiekis > 0) {
-                    break;
-                }
-
-                cout << "Turi buti sugeneruotas bent vienas pazymys."
-                     << endl;
-            }
-
-            generuotiPazymius(studentas, kiekis);
-
-            cout << "Sugeneruoti namu darbu pazymiai: ";
-
-            for (int pazymys : studentas.nd) {
-                cout << pazymys << " ";
-            }
-
-            cout << endl;
-
-            cout << "Sugeneruotas egzamino pazymys: "
-                 << studentas.egzaminas << endl;
-
-            studentai.push_back(studentas);
-        }
-        else if (veiksmas == 3) {
 
             string failoPavadinimas;
 
@@ -239,6 +198,7 @@ int main() {
 
             skaitytiIsFailo(studentai, failoPavadinimas);
         }
+
         else {
 
             cout << "Neteisingas pasirinkimas." << endl;
@@ -247,8 +207,7 @@ int main() {
         cout << endl;
         cout << "Pasirinkite veiksma:" << endl;
         cout << "1 - Ivesti studentus" << endl;
-        cout << "2 - Generuoti studentus" << endl;
-        cout << "3 - Nuskaityti studentus is failo" << endl;
+        cout << "2 - Nuskaityti studentus is failo" << endl;
         cout << "0 - Baigti programa" << endl;
 
         cin >> veiksmas;
@@ -274,7 +233,6 @@ int main() {
         cout << "Neteisingas pasirinkimas. Iveskite 1 arba 2: ";
     }
 
-    // Rikiuojame studentus pagal pavarde, o jei pavardes vienodos - pagal varda
     sort(studentai.begin(), studentai.end(),
         [](const Studentas& a, const Studentas& b) {
 
@@ -332,7 +290,6 @@ int main() {
             galutinis =
                 0.4 * ndVidurkis +
                 0.6 * studentas.egzaminas;
-
         }
         else {
 
