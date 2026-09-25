@@ -40,6 +40,114 @@ int main() {
     while (veiksmas != 0) {
 
         if (veiksmas == 1) {
+
+            bool testiIvedima = true;
+
+            while (testiIvedima) {
+
+                Studentas studentas;
+
+                cout << "Iveskite studento varda: ";
+                cin >> studentas.vardas;
+
+                cout << "Iveskite studento pavarde: ";
+                cin >> studentas.pavarde;
+
+                cout << "Pasirinkite pazymiu ivedimo buda:" << endl;
+                cout << "1 - Ivesti pazymius paciam" << endl;
+                cout << "2 - Sugeneruoti atsitiktinius pazymius" << endl;
+
+                int pazymiuIvedimas;
+
+                while (true) {
+                    cin >> pazymiuIvedimas;
+
+                    if (pazymiuIvedimas == 1 || pazymiuIvedimas == 2) {
+                        break;
+                    }
+
+                    cout << "Neteisingas pasirinkimas. Iveskite 1 arba 2: ";
+                }
+
+                if (pazymiuIvedimas == 1) {
+
+                    cout << "Iveskite studento namu darbu pazymius "
+                         << "(norint pabaigti - iveskite 0):" << endl;
+
+                    int pazymys;
+
+                    while (true) {
+                        cin >> pazymys;
+
+                        if (pazymys == 0 && !studentas.nd.empty()) {
+                            break;
+                        }
+
+                        if (pazymys >= 1 && pazymys <= 10) {
+                            studentas.nd.push_back(pazymys);
+                        } else {
+                            cout << "Pazymys turi buti nuo 1 iki 10." << endl;
+                        }
+                    }
+
+                    cout << "Iveskite studento egzamino pazymi: ";
+
+                    while (true) {
+                        cin >> studentas.egzaminas;
+
+                        if (studentas.egzaminas >= 1 &&
+                            studentas.egzaminas <= 10) {
+                            break;
+                        }
+
+                        cout << "Pazymys turi buti nuo 1 iki 10." << endl;
+                    }
+
+                } else {
+
+                    int kiekis;
+
+                    while (true) {
+                        cout << "Kiek namu darbu pazymiu sugeneruoti? ";
+                        cin >> kiekis;
+
+                        if (kiekis > 0) {
+                            break;
+                        }
+
+                        cout << "Turi buti sugeneruotas bent vienas pazymys."
+                             << endl;
+                    }
+
+                    generuotiPazymius(studentas, kiekis);
+
+                    cout << "Sugeneruoti namu darbu pazymiai: ";
+
+                    for (int pazymys : studentas.nd) {
+                        cout << pazymys << " ";
+                    }
+
+                    cout << endl;
+
+                    cout << "Sugeneruotas egzamino pazymys: "
+                         << studentas.egzaminas << endl;
+                }
+
+                studentai.push_back(studentas);
+
+                char pasirinkimas;
+
+                cout << "Ar norite ivesti dar viena studenta? (t/n): ";
+                cin >> pasirinkimas;
+
+                if (pasirinkimas == 'n') {
+                    testiIvedima = false;
+                }
+            }
+        }
+
+        else if (veiksmas == 2) {
+
             Studentas studentas;
 
             cout << "Iveskite studento varda: ";
@@ -48,89 +156,56 @@ int main() {
             cout << "Iveskite studento pavarde: ";
             cin >> studentas.pavarde;
 
-            cout << "Pasirinkite pazymiu ivedimo buda:" << endl;
-            cout << "1 - Ivesti pazymius paciam" << endl;
-            cout << "2 - Sugeneruoti atsitiktinius pazymius" << endl;
-
-            int pazymiuIvedimas;
+            int kiekis;
 
             while (true) {
-                cin >> pazymiuIvedimas;
-
-                if (pazymiuIvedimas == 1 || pazymiuIvedimas == 2) {
-                    break;
-                }
-
-                cout << "Neteisingas pasirinkimas. Iveskite 1 arba 2: ";
-            }
-
-            if (pazymiuIvedimas == 1) {
-                cout << "Iveskite studento namu darbu pazymius (norint pabaigti - iveskite 0):" << endl;
-
-                int pazymys;
-
-                while (true) {
-                    cin >> pazymys;
-
-                    if (pazymys == 0 && !studentas.nd.empty()) {
-                        break;
-                    }
-
-                    if (pazymys >= 1 && pazymys <= 10) {
-                        studentas.nd.push_back(pazymys);
-                    } else {
-                        cout << "Pazymys turi buti nuo 1 iki 10." << endl;
-                    }
-                }
-
-                cout << "Iveskite studento egzamino pazymi: ";
-
-                while (true) {
-                    cin >> studentas.egzaminas;
-
-                    if (studentas.egzaminas >= 1 && studentas.egzaminas <= 10) {
-                        break;
-                    }
-
-                    cout << "Pazymys turi buti nuo 1 iki 10." << endl;
-                }
-
-            } else {
-                int kiekis;
-
                 cout << "Kiek namu darbu pazymiu sugeneruoti? ";
                 cin >> kiekis;
 
-                generuotiPazymius(studentas, kiekis);
-
-                cout << "Sugeneruoti namu darbu pazymiai: ";
-
-                for (int pazymys : studentas.nd) {
-                    cout << pazymys << " ";
+                if (kiekis > 0) {
+                    break;
                 }
 
-                cout << endl;
-
-                cout << "Sugeneruotas egzamino pazymys: "
-                     << studentas.egzaminas << endl;
+                cout << "Turi buti sugeneruotas bent vienas pazymys."
+                     << endl;
             }
+
+            generuotiPazymius(studentas, kiekis);
+
+            cout << "Sugeneruoti namu darbu pazymiai: ";
+
+            for (int pazymys : studentas.nd) {
+                cout << pazymys << " ";
+            }
+
+            cout << endl;
+
+            cout << "Sugeneruotas egzamino pazymys: "
+                 << studentas.egzaminas << endl;
 
             studentai.push_back(studentas);
-
-            char pasirinkimas;
-
-            cout << "Ar norite ivesti dar viena studenta? (t/n): ";
-            cin >> pasirinkimas;
-
-            if (pasirinkimas == 'n') {
-                break;
-            }
         }
 
-        cin >> veiksmas;
+        else {
+            cout << "Neteisingas pasirinkimas." << endl;
+        }
+
+        if (veiksmas != 0) {
+            cout << endl;
+            cout << "Pasirinkite veiksma:" << endl;
+            cout << "1 - Ivesti studentus" << endl;
+            cout << "2 - Generuoti studentus" << endl;
+            cout << "0 - Baigti programa" << endl;
+
+            cin >> veiksmas;
+        }
     }
 
-    if (veiksmas == 0) {
+    if (veiksmas == 0 && studentai.empty()) {
+        return 0;
+    }
+
+    if (studentai.empty()) {
         return 0;
     }
 
@@ -151,6 +226,7 @@ int main() {
     }
 
     for (Studentas studentas : studentai) {
+
         double ndVidurkis = 0;
 
         for (int pazymys : studentas.nd) {
@@ -160,29 +236,37 @@ int main() {
         ndVidurkis /= studentas.nd.size();
 
         vector<int> surikiuotiPazymiai = studentas.nd;
+
         sort(surikiuotiPazymiai.begin(), surikiuotiPazymiai.end());
 
         double ndMediana;
 
         if (surikiuotiPazymiai.size() % 2 == 1) {
-            ndMediana = surikiuotiPazymiai[surikiuotiPazymiai.size() / 2];
+            ndMediana =
+                surikiuotiPazymiai[surikiuotiPazymiai.size() / 2];
         } else {
-            ndMediana = (surikiuotiPazymiai[surikiuotiPazymiai.size() / 2 - 1]
-                       + surikiuotiPazymiai[surikiuotiPazymiai.size() / 2]) / 2.0;
+            ndMediana =
+                (surikiuotiPazymiai[surikiuotiPazymiai.size() / 2 - 1]
+                + surikiuotiPazymiai[surikiuotiPazymiai.size() / 2])
+                / 2.0;
         }
 
         double galutinis;
 
         if (pasirinkimas == 1) {
-            galutinis = 0.4 * ndVidurkis + 0.6 * studentas.egzaminas;
+            galutinis =
+                0.4 * ndVidurkis + 0.6 * studentas.egzaminas;
         } else {
-            galutinis = 0.4 * ndMediana + 0.6 * studentas.egzaminas;
+            galutinis =
+                0.4 * ndMediana + 0.6 * studentas.egzaminas;
         }
 
         cout << fixed << setprecision(2);
 
-        cout << studentas.vardas << " " << studentas.pavarde
-             << " Galutinis pazymys: " << galutinis << endl;
+        cout << studentas.vardas << " "
+             << studentas.pavarde
+             << " Galutinis pazymys: "
+             << galutinis << endl;
     }
 
     return 0;
