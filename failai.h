@@ -15,4 +15,8 @@ void padalintiStudentus(const vector<Studentas>& studentai,
                         vector<Studentas>& maziaukieti,
                         vector<Studentas>& kieti);
 
+void rasytiRezultatus(const vector<Studentas>& studentai,
+                      string failoPavadinimas,
+                      int rusiavimoPasirinkimas);
+
 #endif

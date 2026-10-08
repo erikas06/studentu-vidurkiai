@@ -174,6 +174,7 @@ int main() {
             cin >> studentuKiekis;
 
             if (studentuKiekis > 0) {
+
                 generuotiFaila(
                     failoPavadinimas,
                     studentuKiekis
@@ -208,6 +209,42 @@ int main() {
             cout << "Kieti: "
                  << kieti.size()
                  << endl;
+
+            cout << endl;
+
+            cout << "Pasirinkite rusiavimo buda:"
+                 << endl;
+
+            cout << "1 - Pagal pavarde" << endl;
+            cout << "2 - Pagal varda" << endl;
+            cout << "3 - Pagal galutini bala" << endl;
+
+            int rusiavimoPasirinkimas;
+
+            while (true) {
+
+                cin >> rusiavimoPasirinkimas;
+
+                if (rusiavimoPasirinkimas >= 1 &&
+                    rusiavimoPasirinkimas <= 3) {
+                    break;
+                }
+
+                cout << "Neteisingas pasirinkimas. "
+                     << "Iveskite 1, 2 arba 3: ";
+            }
+
+            rasytiRezultatus(
+                maziaukieti,
+                "maziaukieti.txt",
+                rusiavimoPasirinkimas
+            );
+
+            rasytiRezultatus(
+                kieti,
+                "kieti.txt",
+                rusiavimoPasirinkimas
+            );
         }
 
         else {
@@ -304,7 +341,6 @@ int main() {
                     surikiuotiPazymiai.size() / 2
                 ];
         }
-
         else {
 
             ndMediana =
@@ -327,7 +363,6 @@ int main() {
                 0.4 * ndVidurkis +
                 0.6 * studentas.egzaminas;
         }
-
         else {
 
             galutinis =

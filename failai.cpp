@@ -5,6 +5,7 @@
 #include <iostream>
 #include <chrono>
 #include <iomanip>
+#include <algorithm>
 
 void skaitytiIsFailo(vector<Studentas>& studentai, string failoPavadinimas) {
 
@@ -126,4 +127,91 @@ void padalintiStudentus(const vector<Studentas>& studentai,
             kieti.push_back(studentas);
         }
     }
+}
+
+
+void rasytiRezultatus(const vector<Studentas>& studentai,
+                      string failoPavadinimas,
+                      int rusiavimoPasirinkimas) {
+
+    vector<Studentas> surikiuoti = studentai;
+
+    sort(surikiuoti.begin(), surikiuoti.end(),
+        [rusiavimoPasirinkimas](const Studentas& a,
+                                const Studentas& b) {
+
+            if (rusiavimoPasirinkimas == 1) {
+                return a.pavarde < b.pavarde;
+            }
+
+            if (rusiavimoPasirinkimas == 2) {
+                return a.vardas < b.vardas;
+            }
+
+            double galutinisA = 0;
+            double galutinisB = 0;
+
+            for (int pazymys : a.nd) {
+                galutinisA += pazymys;
+            }
+
+            for (int pazymys : b.nd) {
+                galutinisB += pazymys;
+            }
+
+            galutinisA =
+                0.4 * (galutinisA / a.nd.size()) +
+                0.6 * a.egzaminas;
+
+            galutinisB =
+                0.4 * (galutinisB / b.nd.size()) +
+                0.6 * b.egzaminas;
+
+            return galutinisA < galutinisB;
+        });
+
+    ofstream failas(failoPavadinimas);
+
+    if (!failas.is_open()) {
+        cout << "Nepavyko sukurti rezultatu failo."
+             << endl;
+        return;
+    }
+
+    failas << left
+           << setw(20) << "Vardas"
+           << setw(20) << "Pavarde"
+           << setw(15) << "Galutinis"
+           << endl;
+
+    failas << string(55, '-') << endl;
+
+    failas << fixed << setprecision(2);
+
+    for (const Studentas& studentas : surikiuoti) {
+
+        double ndVidurkis = 0;
+
+        for (int pazymys : studentas.nd) {
+            ndVidurkis += pazymys;
+        }
+
+        ndVidurkis /= studentas.nd.size();
+
+        double galutinis =
+            0.4 * ndVidurkis +
+            0.6 * studentas.egzaminas;
+
+        failas << left
+               << setw(20) << studentas.vardas
+               << setw(20) << studentas.pavarde
+               << setw(15) << galutinis
+               << endl;
+    }
+
+    failas.close();
+
+    cout << "Rezultatai irasyti i "
+         << failoPavadinimas
+         << endl;
 }
