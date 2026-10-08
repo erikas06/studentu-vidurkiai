@@ -6,50 +6,14 @@
 #include <fstream>
 #include <sstream>
 #include "studentas.h"
+#include "failai.h"
 
 using namespace std;
 
 
 
 
-void skaitytiIsFailo(vector<Studentas>& studentai, string failoPavadinimas) {
-    ifstream failas(failoPavadinimas);
 
-    if (!failas.is_open()) {
-        cout << "Nepavyko atidaryti failo." << endl;
-        return;
-    }
-
-    string eilute;
-
-    getline(failas, eilute);
-
-    while (getline(failas, eilute)) {
-        stringstream ss(eilute);
-        Studentas studentas;
-
-        ss >> studentas.vardas >> studentas.pavarde;
-
-        vector<int> pazymiai;
-        int pazymys;
-
-        while (ss >> pazymys) {
-            pazymiai.push_back(pazymys);
-        }
-
-        if (!pazymiai.empty()) {
-            studentas.egzaminas = pazymiai.back();
-            pazymiai.pop_back();
-            studentas.nd = pazymiai;
-
-            studentai.push_back(studentas);
-        }
-    }
-
-    failas.close();
-
-    cout << "Studentai nuskaityti is failo." << endl;
-}
 
 int main() {
     vector<Studentas> studentai;
@@ -57,6 +21,7 @@ int main() {
     cout << "Pasirinkite veiksma:" << endl;
     cout << "1 - Ivesti studentus" << endl;
     cout << "2 - Nuskaityti studentus is failo" << endl;
+    cout << "3 - Generuoti studentu faila" << endl;
     cout << "0 - Baigti programa" << endl;
 
     int veiksmas;
@@ -183,6 +148,20 @@ int main() {
             skaitytiIsFailo(studentai, failoPavadinimas);
         }
 
+        else if (veiksmas == 3) {
+
+            string failoPavadinimas;
+            int studentuKiekis;
+
+            cout << "Iveskite failo pavadinima: ";
+            cin >> failoPavadinimas;
+
+            cout << "Iveskite studentu skaiciu: ";
+            cin >> studentuKiekis;
+
+            generuotiFaila(failoPavadinimas, studentuKiekis);
+        }
+
         else {
 
             cout << "Neteisingas pasirinkimas." << endl;
@@ -192,6 +171,7 @@ int main() {
         cout << "Pasirinkite veiksma:" << endl;
         cout << "1 - Ivesti studentus" << endl;
         cout << "2 - Nuskaityti studentus is failo" << endl;
+        cout << "3 - Generuoti studentu faila" << endl;
         cout << "0 - Baigti programa" << endl;
 
         cin >> veiksmas;
