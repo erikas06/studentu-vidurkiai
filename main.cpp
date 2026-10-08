@@ -3,30 +3,14 @@
 #include <vector>
 #include <iomanip>
 #include <algorithm>
-#include <random>
 #include <fstream>
 #include <sstream>
+#include "studentas.h"
 
 using namespace std;
 
-struct Studentas {
-    string vardas;
-    string pavarde;
-    vector<int> nd;
-    int egzaminas;
-};
 
-void generuotiPazymius(Studentas& studentas, int kiekis) {
-    random_device rd;
-    mt19937 gen(rd());
-    uniform_int_distribution<> dist(1, 10);
 
-    for (int i = 0; i < kiekis; i++) {
-        studentas.nd.push_back(dist(gen));
-    }
-
-    studentas.egzaminas = dist(gen);
-}
 
 void skaitytiIsFailo(vector<Studentas>& studentai, string failoPavadinimas) {
     ifstream failas(failoPavadinimas);
