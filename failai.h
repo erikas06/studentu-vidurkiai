@@ -11,4 +11,8 @@ void skaitytiIsFailo(vector<Studentas>& studentai, string failoPavadinimas);
 
 void generuotiFaila(string failoPavadinimas, int studentuKiekis);
 
+void padalintiStudentus(const vector<Studentas>& studentai,
+                        vector<Studentas>& maziaukieti,
+                        vector<Studentas>& kieti);
+
 #endif

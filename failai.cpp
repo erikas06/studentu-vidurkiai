@@ -7,6 +7,7 @@
 #include <iomanip>
 
 void skaitytiIsFailo(vector<Studentas>& studentai, string failoPavadinimas) {
+
     ifstream failas(failoPavadinimas);
 
     if (!failas.is_open()) {
@@ -19,6 +20,7 @@ void skaitytiIsFailo(vector<Studentas>& studentai, string failoPavadinimas) {
     getline(failas, eilute);
 
     while (getline(failas, eilute)) {
+
         stringstream ss(eilute);
         Studentas studentas;
 
@@ -32,8 +34,11 @@ void skaitytiIsFailo(vector<Studentas>& studentai, string failoPavadinimas) {
         }
 
         if (!pazymiai.empty()) {
+
             studentas.egzaminas = pazymiai.back();
+
             pazymiai.pop_back();
+
             studentas.nd = pazymiai;
 
             studentai.push_back(studentas);
@@ -45,7 +50,9 @@ void skaitytiIsFailo(vector<Studentas>& studentai, string failoPavadinimas) {
     cout << "Studentai nuskaityti is failo." << endl;
 }
 
+
 void generuotiFaila(string failoPavadinimas, int studentuKiekis) {
+
     ofstream failas(failoPavadinimas);
 
     if (!failas.is_open()) {
@@ -86,7 +93,37 @@ void generuotiFaila(string failoPavadinimas, int studentuKiekis) {
     chrono::duration<double> trukme = pabaiga - pradzia;
 
     cout << fixed << setprecision(3);
+
     cout << "Failas " << failoPavadinimas
          << " sugeneruotas per "
-         << trukme.count() << " s." << endl;
+         << trukme.count()
+         << " s." << endl;
+}
+
+
+void padalintiStudentus(const vector<Studentas>& studentai,
+                        vector<Studentas>& maziaukieti,
+                        vector<Studentas>& kieti) {
+
+    for (const Studentas& studentas : studentai) {
+
+        double ndVidurkis = 0;
+
+        for (int pazymys : studentas.nd) {
+            ndVidurkis += pazymys;
+        }
+
+        ndVidurkis /= studentas.nd.size();
+
+        double galutinis =
+            0.4 * ndVidurkis +
+            0.6 * studentas.egzaminas;
+
+        if (galutinis < 5.0) {
+            maziaukieti.push_back(studentas);
+        }
+        else {
+            kieti.push_back(studentas);
+        }
+    }
 }
