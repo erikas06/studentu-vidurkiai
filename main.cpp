@@ -3,6 +3,7 @@
 #include <vector>
 #include <iomanip>
 #include <algorithm>
+#include <chrono>
 #include "studentas.h"
 #include "failai.h"
 
@@ -11,6 +12,10 @@ using namespace std;
 int main() {
 
     vector<Studentas> studentai;
+
+    double nuskaitymoLaikas = 0;
+    double grupavimoLaikas = 0;
+    double irasymoLaikas = 0;
 
     cout << "Pasirinkite veiksma:" << endl;
     cout << "1 - Ivesti studentus" << endl;
@@ -159,7 +164,11 @@ int main() {
             cout << "Iveskite failo pavadinima: ";
             cin >> failoPavadinimas;
 
-            skaitytiIsFailo(studentai, failoPavadinimas);
+            nuskaitymoLaikas =
+                skaitytiIsFailo(
+                    studentai,
+                    failoPavadinimas
+                );
         }
 
         else if (veiksmas == 3) {
@@ -193,11 +202,23 @@ int main() {
             vector<Studentas> maziaukieti;
             vector<Studentas> kieti;
 
+            auto pradziaGrupavimas =
+                chrono::high_resolution_clock::now();
+
             padalintiStudentus(
                 studentai,
                 maziaukieti,
                 kieti
             );
+
+            auto pabaigaGrupavimas =
+                chrono::high_resolution_clock::now();
+
+            chrono::duration<double> trukmeGrupavimas =
+                pabaigaGrupavimas - pradziaGrupavimas;
+
+            grupavimoLaikas =
+                trukmeGrupavimas.count();
 
             cout << "Studentu padalijimas baigtas."
                  << endl;
@@ -208,6 +229,12 @@ int main() {
 
             cout << "Kieti: "
                  << kieti.size()
+                 << endl;
+
+            cout << "Studentu grupavimas truko "
+                 << fixed << setprecision(6)
+                 << grupavimoLaikas
+                 << " s."
                  << endl;
 
             cout << endl;
@@ -234,6 +261,9 @@ int main() {
                      << "Iveskite 1, 2 arba 3: ";
             }
 
+            auto pradziaIrasymas =
+                chrono::high_resolution_clock::now();
+
             rasytiRezultatus(
                 maziaukieti,
                 "maziaukieti.txt",
@@ -245,6 +275,21 @@ int main() {
                 "kieti.txt",
                 rusiavimoPasirinkimas
             );
+
+            auto pabaigaIrasymas =
+                chrono::high_resolution_clock::now();
+
+            chrono::duration<double> trukmeIrasymas =
+                pabaigaIrasymas - pradziaIrasymas;
+
+            irasymoLaikas =
+                trukmeIrasymas.count();
+
+            cout << "Rezultatu failu irasymas truko "
+                 << fixed << setprecision(6)
+                 << irasymoLaikas
+                 << " s."
+                 << endl;
         }
 
         else {
@@ -268,6 +313,29 @@ int main() {
     if (studentai.empty()) {
         return 0;
     }
+
+    cout << endl;
+
+    cout << "TESTAVIMO LAIKAI"
+         << endl;
+
+    cout << "Failo nuskaitymas:     "
+         << fixed << setprecision(6)
+         << nuskaitymoLaikas
+         << " s"
+         << endl;
+
+    cout << "Studentu grupavimas:   "
+         << grupavimoLaikas
+         << " s"
+         << endl;
+
+    cout << "Rezultatu irasymas:    "
+         << irasymoLaikas
+         << " s"
+         << endl;
+
+    cout << endl;
 
     cout << "Pasirinkite galutinio balo "
          << "skaiciavimo buda:"

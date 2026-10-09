@@ -7,14 +7,18 @@
 #include <iomanip>
 #include <algorithm>
 
-void skaitytiIsFailo(vector<Studentas>& studentai, string failoPavadinimas) {
+double skaitytiIsFailo(vector<Studentas>& studentai,
+                       string failoPavadinimas) {
 
     ifstream failas(failoPavadinimas);
 
     if (!failas.is_open()) {
         cout << "Nepavyko atidaryti failo." << endl;
-        return;
+        return 0;
     }
+
+    auto pradzia =
+        chrono::high_resolution_clock::now();
 
     string eilute;
 
@@ -25,7 +29,8 @@ void skaitytiIsFailo(vector<Studentas>& studentai, string failoPavadinimas) {
         stringstream ss(eilute);
         Studentas studentas;
 
-        ss >> studentas.vardas >> studentas.pavarde;
+        ss >> studentas.vardas
+           >> studentas.pavarde;
 
         vector<int> pazymiai;
         int pazymys;
@@ -36,28 +41,47 @@ void skaitytiIsFailo(vector<Studentas>& studentai, string failoPavadinimas) {
 
         if (!pazymiai.empty()) {
 
-            studentas.egzaminas = pazymiai.back();
+            studentas.egzaminas =
+                pazymiai.back();
 
             pazymiai.pop_back();
 
-            studentas.nd = pazymiai;
+            studentas.nd =
+                pazymiai;
 
             studentai.push_back(studentas);
         }
     }
 
+    auto pabaiga =
+        chrono::high_resolution_clock::now();
+
+    chrono::duration<double> trukme =
+        pabaiga - pradzia;
+
     failas.close();
 
-    cout << "Studentai nuskaityti is failo." << endl;
+    cout << "Studentai nuskaityti is failo."
+         << endl;
+
+    cout << "Failo nuskaitymas truko "
+         << fixed << setprecision(6)
+         << trukme.count()
+         << " s."
+         << endl;
+
+    return trukme.count();
 }
 
 
-void generuotiFaila(string failoPavadinimas, int studentuKiekis) {
+void generuotiFaila(string failoPavadinimas,
+                    int studentuKiekis) {
 
     ofstream failas(failoPavadinimas);
 
     if (!failas.is_open()) {
-        cout << "Nepavyko sukurti failo." << endl;
+        cout << "Nepavyko sukurti failo."
+             << endl;
         return;
     }
 
@@ -65,7 +89,8 @@ void generuotiFaila(string failoPavadinimas, int studentuKiekis) {
     mt19937 gen(rd());
     uniform_int_distribution<> dist(1, 10);
 
-    auto pradzia = chrono::high_resolution_clock::now();
+    auto pradzia =
+        chrono::high_resolution_clock::now();
 
     failas << "Vardas Pavarde ";
 
@@ -89,22 +114,27 @@ void generuotiFaila(string failoPavadinimas, int studentuKiekis) {
 
     failas.close();
 
-    auto pabaiga = chrono::high_resolution_clock::now();
+    auto pabaiga =
+        chrono::high_resolution_clock::now();
 
-    chrono::duration<double> trukme = pabaiga - pradzia;
+    chrono::duration<double> trukme =
+        pabaiga - pradzia;
 
     cout << fixed << setprecision(3);
 
-    cout << "Failas " << failoPavadinimas
+    cout << "Failas "
+         << failoPavadinimas
          << " sugeneruotas per "
          << trukme.count()
-         << " s." << endl;
+         << " s."
+         << endl;
 }
 
 
-void padalintiStudentus(const vector<Studentas>& studentai,
-                        vector<Studentas>& maziaukieti,
-                        vector<Studentas>& kieti) {
+void padalintiStudentus(
+    const vector<Studentas>& studentai,
+    vector<Studentas>& maziaukieti,
+    vector<Studentas>& kieti) {
 
     for (const Studentas& studentas : studentai) {
 
@@ -114,7 +144,8 @@ void padalintiStudentus(const vector<Studentas>& studentai,
             ndVidurkis += pazymys;
         }
 
-        ndVidurkis /= studentas.nd.size();
+        ndVidurkis /=
+            studentas.nd.size();
 
         double galutinis =
             0.4 * ndVidurkis +
@@ -130,15 +161,20 @@ void padalintiStudentus(const vector<Studentas>& studentai,
 }
 
 
-void rasytiRezultatus(const vector<Studentas>& studentai,
-                      string failoPavadinimas,
-                      int rusiavimoPasirinkimas) {
+void rasytiRezultatus(
+    const vector<Studentas>& studentai,
+    string failoPavadinimas,
+    int rusiavimoPasirinkimas) {
 
-    vector<Studentas> surikiuoti = studentai;
+    vector<Studentas> surikiuoti =
+        studentai;
 
-    sort(surikiuoti.begin(), surikiuoti.end(),
-        [rusiavimoPasirinkimas](const Studentas& a,
-                                const Studentas& b) {
+    sort(
+        surikiuoti.begin(),
+        surikiuoti.end(),
+        [rusiavimoPasirinkimas](
+            const Studentas& a,
+            const Studentas& b) {
 
             if (rusiavimoPasirinkimas == 1) {
                 return a.pavarde < b.pavarde;
@@ -160,15 +196,18 @@ void rasytiRezultatus(const vector<Studentas>& studentai,
             }
 
             galutinisA =
-                0.4 * (galutinisA / a.nd.size()) +
+                0.4 *
+                (galutinisA / a.nd.size()) +
                 0.6 * a.egzaminas;
 
             galutinisB =
-                0.4 * (galutinisB / b.nd.size()) +
+                0.4 *
+                (galutinisB / b.nd.size()) +
                 0.6 * b.egzaminas;
 
             return galutinisA < galutinisB;
-        });
+        }
+    );
 
     ofstream failas(failoPavadinimas);
 
@@ -184,28 +223,37 @@ void rasytiRezultatus(const vector<Studentas>& studentai,
            << setw(15) << "Galutinis"
            << endl;
 
-    failas << string(55, '-') << endl;
+    failas << string(55, '-')
+           << endl;
 
-    failas << fixed << setprecision(2);
+    failas << fixed
+           << setprecision(2);
 
-    for (const Studentas& studentas : surikiuoti) {
+    for (const Studentas& studentas :
+         surikiuoti) {
 
         double ndVidurkis = 0;
 
-        for (int pazymys : studentas.nd) {
+        for (int pazymys :
+             studentas.nd) {
+
             ndVidurkis += pazymys;
         }
 
-        ndVidurkis /= studentas.nd.size();
+        ndVidurkis /=
+            studentas.nd.size();
 
         double galutinis =
             0.4 * ndVidurkis +
             0.6 * studentas.egzaminas;
 
         failas << left
-               << setw(20) << studentas.vardas
-               << setw(20) << studentas.pavarde
-               << setw(15) << galutinis
+               << setw(20)
+               << studentas.vardas
+               << setw(20)
+               << studentas.pavarde
+               << setw(15)
+               << galutinis
                << endl;
     }
 
