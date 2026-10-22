@@ -2,6 +2,7 @@
 #include <string>
 #include <vector>
 #include <iomanip>
+#include <fstream>
 #include <algorithm>
 #include <chrono>
 #include "studentas.h"
@@ -164,6 +165,8 @@ int main() {
             cout << "Iveskite failo pavadinima: ";
             cin >> failoPavadinimas;
 
+            studentai.clear();
+
             nuskaitymoLaikas =
                 skaitytiIsFailo(
                     studentai,
@@ -188,6 +191,15 @@ int main() {
                     failoPavadinimas,
                     studentuKiekis
                 );
+
+                studentai.clear();
+                nuskaitymoLaikas =
+                    skaitytiIsFailo(studentai, failoPavadinimas);
+
+                if (studentai.empty()) {
+                    cout << "Nepavyko nuskaityti sugeneruoto failo."
+                         << endl;
+                }
             }
             else {
 
@@ -359,30 +371,13 @@ int main() {
              << "Iveskite 1 arba 2: ";
     }
 
-    sort(
-        studentai.begin(),
-        studentai.end(),
-        [](const Studentas& a, const Studentas& b) {
-
-            if (a.pavarde != b.pavarde) {
-                return a.pavarde < b.pavarde;
-            }
-
-            return a.vardas < b.vardas;
-        }
-    );
-
-    cout << endl;
-
-    cout << left
-         << setw(20) << "Vardas"
-         << setw(20) << "Pavarde"
-         << setw(15) << "Galutinis"
-         << endl;
-
-    cout << string(55, '-') << endl;
+    vector<pair<Studentas, double>> galutiniaiRezultatai;
 
     for (const Studentas& studentas : studentai) {
+
+        if (studentas.nd.empty()) {
+            continue;
+        }
 
         double ndVidurkis = 0;
 
@@ -392,8 +387,7 @@ int main() {
 
         ndVidurkis /= studentas.nd.size();
 
-        vector<int> surikiuotiPazymiai =
-            studentas.nd;
+        vector<int> surikiuotiPazymiai = studentas.nd;
 
         sort(
             surikiuotiPazymiai.begin(),
@@ -426,26 +420,59 @@ int main() {
         double galutinis;
 
         if (pasirinkimas == 1) {
-
             galutinis =
                 0.4 * ndVidurkis +
                 0.6 * studentas.egzaminas;
         }
         else {
-
             galutinis =
                 0.4 * ndMediana +
                 0.6 * studentas.egzaminas;
         }
 
-        cout << fixed << setprecision(2);
-
-        cout << left
-             << setw(20) << studentas.vardas
-             << setw(20) << studentas.pavarde
-             << setw(15) << galutinis
-             << endl;
+        galutiniaiRezultatai.push_back({studentas, galutinis});
     }
+
+    
+    sort(
+        galutiniaiRezultatai.begin(),
+        galutiniaiRezultatai.end(),
+        [](const pair<Studentas, double>& a,
+           const pair<Studentas, double>& b) {
+            return a.second > b.second;
+        }
+    );
+
+    ofstream rezultatuFailas("galutiniai_rezultatai.txt");
+
+    if (!rezultatuFailas) {
+        cout << "Nepavyko sukurti galutiniai_rezultatai.txt failo."
+             << endl;
+        return 1;
+    }
+
+    rezultatuFailas << left
+                    << setw(20) << "Vardas"
+                    << setw(20) << "Pavarde"
+                    << setw(15) << "Galutinis"
+                    << endl;
+
+    rezultatuFailas << string(55, '-') << endl;
+    rezultatuFailas << fixed << setprecision(2);
+
+    for (const auto& rezultatas : galutiniaiRezultatai) {
+        rezultatuFailas << left
+                        << setw(20) << rezultatas.first.vardas
+                        << setw(20) << rezultatas.first.pavarde
+                        << setw(15) << rezultatas.second
+                        << endl;
+    }
+
+    rezultatuFailas.close();
+
+    cout << "Rezultatai surikiuoti pagal galutini bala ir irasyti i "
+         << "galutiniai_rezultatai.txt"
+         << endl;
 
     return 0;
 }
